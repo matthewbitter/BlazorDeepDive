@@ -1,5 +1,7 @@
 ﻿@page "/servers"
 
+@inject NavigationManager NavigationManager
+
 <h3>Servers</h3>
 
 <br />
@@ -42,6 +44,11 @@
             <span style="color: @(server.IsOnline ? "green" : "red")">
                 @(server.IsOnline ? "Online" : "Offline")
             </span>
+            <EditForm Model="server" FormName="@($"FormServer-{server.ServerId}")" OnValidSubmit="() => { DeleteServer(server.ServerId); }">
+                <button type="submit" class="btn btn-secondary">
+                    Delete
+                </button>
+            </EditForm>        
         </li>
     }
 </ul>
@@ -51,6 +58,17 @@
     private string selectedCity = "Toronto";
     private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<String> cities = CitiesRepository.GetCities().ToList<String>();
+
+
+    private void DeleteServer(int serverId)
+    {
+
+        ServersRepository.DeleteServer(serverId);
+        servers = ServersRepository.GetServersByCity(selectedCity);
+
+        NavigationManager.Refresh();
+
+    }
     
 
 }
