@@ -1,0 +1,12 @@
+﻿<div data-name="@Server.Name"
+     data-status="Server is @OnlineOrOffline"
+     style="@($"color: {(Server.IsOnline ? "green" : "red")}")">
+    @Server.Name is in @Server.City that is @OnlineOrOffline
+</div>
+
+@code {
+
+    private Server Server = new Server { Name = "Server 1", City = "Toronto" };
+    private string OnlineOrOffline => Server.IsOnline ? "online" : "offline";
+
+}
