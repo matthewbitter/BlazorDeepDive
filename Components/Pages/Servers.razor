@@ -16,7 +16,7 @@
         @foreach (var city in cities)
         {
             <div class="col">
-                <div class="card">
+                <div class="card @(city == selectedCity ? "border-primary" : "")">
                     <img src="/images/@(city).png" class="card-img-top" alt="@city" />
                     <div class="card-body">
                         <button type="button" class="btn btn-primary" @onclick="() => SelectCity(city)">
@@ -29,7 +29,12 @@
     </div>
 </div>
 
-<ServerComponent @rendermode="InteractiveServer" />
+<div class="input-group mb-3">
+    <input @bind-value="ServerFilter" type="text" class="form-control" placeholder="Search servers..." />
+    <button type="button" class="btn btn-outline-secondary" @onclick="Search">
+        Search
+    </button>
+</div>
 
 <br />
 <a href="/Servers/Add" class="btn btn-primary">
@@ -38,9 +43,8 @@
 <br />
 
 <ul>
-    @foreach (var server in servers)
-    {
-        <li>
+    <Virtualize Items="servers" Context="server">
+        <li @key="server.ServerId">
             <a href="/Servers/@server.ServerId" class="btn btn-link">
                 @server.Name
             </a> 
@@ -54,12 +58,13 @@
                 </button>
             </EditForm>        
         </li>
-    }
+    </Virtualize>
 </ul>
 
 @code {
 
     private string selectedCity = "Toronto";
+    private string ServerFilter = "";
     private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<String> cities = CitiesRepository.GetCities().ToList<String>();
 
@@ -78,6 +83,16 @@
     {
         selectedCity = city;
         servers = ServersRepository.GetServersByCity(selectedCity);
+    }
+
+
+    private void Search()
+    {
+
+        servers = ServersRepository.GetServersByCity(selectedCity)
+            .Where(s => s.Name.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase))
+            .ToList();
+
     }
     
 
