@@ -2,6 +2,8 @@
 
 @inject NavigationManager NavigationManager
 
+@rendermode InteractiveServer
+
 <h3>Servers</h3>
 
 <br />
@@ -17,7 +19,7 @@
                 <div class="card">
                     <img src="/images/@(city).png" class="card-img-top" alt="@city" />
                     <div class="card-body">
-                        <button type="button" class="btn btn-primary" @onclick="() => selectedCity = city">
+                        <button type="button" class="btn btn-primary" @onclick="() => SelectCity(city)">
                             @city
                         </button>
                     </div>
@@ -70,6 +72,12 @@
 
         NavigationManager.Refresh();
 
+    }
+
+    private void SelectCity(string city)
+    {
+        selectedCity = city;
+        servers = ServersRepository.GetServersByCity(selectedCity);
     }
     
 
