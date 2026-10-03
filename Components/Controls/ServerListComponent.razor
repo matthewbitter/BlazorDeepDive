@@ -1,0 +1,38 @@
+﻿@if (Servers != null && Servers.Count > 0)
+{
+
+    <br />
+    <a href="/Servers/Add" class="btn btn-primary">
+        Add Server
+    </a>
+    <br />
+
+    <ul>
+        <Virtualize Items="Servers" Context="server">
+            <ServerComponent Server="server" />
+        </Virtualize>
+    </ul>
+}
+
+@code {
+
+    [Parameter]
+    public string? SelectedCity { get; set; }
+    [Parameter]
+    public string? ServerFilter { get; set; }
+
+    private List<Server>? Servers;
+
+    protected override void OnParametersSet()
+    {
+
+        Servers = ServersRepository.GetServersByCity(SelectedCity ?? "Toronto");
+
+        if (!string.IsNullOrEmpty(ServerFilter))
+        {
+            Servers = Servers.Where(s => s.Name.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+    }
+
+}

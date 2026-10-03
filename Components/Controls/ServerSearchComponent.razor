@@ -1,0 +1,27 @@
+﻿<div class="input-group mb-3">
+    <input @bind-value="ServerFilter" type="text" class="form-control" placeholder="Search servers..." />
+    <button type="button" class="btn btn-outline-secondary" @onclick="Search">
+        Search
+    </button>
+</div>
+
+@code {
+
+    [Parameter]
+    public string ServerFilter { get; set; } = "";
+
+    [Parameter]
+    public EventCallback<string> OnServerFilterChanged { get; set; }
+
+    private void Search()
+    {
+
+        OnServerFilterChanged.InvokeAsync(ServerFilter);
+
+        //servers = ServersRepository.GetServersByCity(selectedCity)
+        //    .Where(s => s.Name.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase))
+        //    .ToList();
+
+    }
+
+}

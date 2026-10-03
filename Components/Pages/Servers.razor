@@ -9,90 +9,26 @@
 <br />
 <br />
 
-<h4>Selected City: @selectedCity</h4>
+<CityListComponent @rendermode="InteractiveServer" OnCitySelected="SelectCity" />
 
-<div class="container-fluid text-center">
-    <div class="row w-50">
-        @foreach (var city in cities)
-        {
-            <div class="col">
-                <div class="card @(city == selectedCity ? "border-primary" : "")">
-                    <img src="/images/@(city).png" class="card-img-top" alt="@city" />
-                    <div class="card-body">
-                        <button type="button" class="btn btn-primary" @onclick="() => SelectCity(city)">
-                            @city
-                        </button>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
-</div>
+<ServerSearchComponent @rendermode="InteractiveServer" ServerFilter="@ServerFilter" OnServerFilterChanged="OnServerFilterChanged" />
 
-<div class="input-group mb-3">
-    <input @bind-value="ServerFilter" type="text" class="form-control" placeholder="Search servers..." />
-    <button type="button" class="btn btn-outline-secondary" @onclick="Search">
-        Search
-    </button>
-</div>
-
-<br />
-<a href="/Servers/Add" class="btn btn-primary">
-    Add Server
-</a>
-<br />
-
-<ul>
-    <Virtualize Items="servers" Context="server">
-        <li @key="server.ServerId">
-            <a href="/Servers/@server.ServerId" class="btn btn-link">
-                @server.Name
-            </a> 
-            in @server.City is 
-            <span style="color: @(server.IsOnline ? "green" : "red")">
-                @(server.IsOnline ? "Online" : "Offline")
-            </span>
-            <EditForm Model="server" FormName="@($"FormServer-{server.ServerId}")" OnValidSubmit="() => { DeleteServer(server.ServerId); }">
-                <button type="submit" class="btn btn-secondary">
-                    Delete
-                </button>
-            </EditForm>        
-        </li>
-    </Virtualize>
-</ul>
+<ServerListComponent @rendermode="InteractiveServer" SelectedCity="@selectedCity" ServerFilter="@ServerFilter" />
 
 @code {
 
     private string selectedCity = "Toronto";
+
     private string ServerFilter = "";
-    private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
-    private List<String> cities = CitiesRepository.GetCities().ToList<String>();
-
-
-    private void DeleteServer(int serverId)
-    {
-
-        ServersRepository.DeleteServer(serverId);
-        servers = ServersRepository.GetServersByCity(selectedCity);
-
-        NavigationManager.Refresh();
-
-    }
 
     private void SelectCity(string city)
     {
         selectedCity = city;
-        servers = ServersRepository.GetServersByCity(selectedCity);
     }
 
-
-    private void Search()
+    private void OnServerFilterChanged(string serverFilter)
     {
-
-        servers = ServersRepository.GetServersByCity(selectedCity)
-            .Where(s => s.Name.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase))
-            .ToList();
-
+        ServerFilter = serverFilter;
     }
     
 
