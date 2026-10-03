@@ -1,0 +1,46 @@
+﻿@page "/ToDoList"
+@rendermode InteractiveServer
+
+<h3>To Do List</h3>
+
+<br />
+
+<button class="btn btn-primary" @onclick="AddTask">
+    Add Task
+</button>
+
+<br />
+<br />
+
+<Virtualize Items="@Tasks" Context="task">
+    <div>
+        <input @bind-value="@task.IsCompleted" type="checkbox" />
+        <input type="text" placeholder="@task.Name" disabled=@task.IsCompleted style="text-decoration: @(task.IsCompleted ? "line-through" : "none")" />
+        @if (task.IsCompleted)
+        {
+            <text>Completed at: @task.CompletedDate.ToLongDateString() </text>
+        }
+    </div>
+</Virtualize>
+
+@code {
+
+    private List<ToDoTask> Tasks = new List<ToDoTask>()
+    {
+
+        new ToDoTask() { TaskId = 1, Name = "Task 1", IsCompleted = false },
+        new ToDoTask() { TaskId = 2, Name = "Task 2", IsCompleted = false },
+        new ToDoTask() { TaskId = 3, Name = "Task 3", IsCompleted = false },
+        new ToDoTask() { TaskId = 4, Name = "Task 4", IsCompleted = false }
+
+    };
+
+
+    private void AddTask()
+    {
+
+        Tasks.Insert(0, new ToDoTask() { TaskId = 5, Name = "Task 5", IsCompleted = false });
+
+    }
+
+}
