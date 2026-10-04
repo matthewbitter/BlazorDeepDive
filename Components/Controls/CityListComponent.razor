@@ -1,10 +1,10 @@
-﻿<h4>Selected City: @selectedCity</h4>
+﻿<h4>Selected City: @SelectedCity</h4>
 
 <div class="container-fluid text-center">
     <div class="row w-50">
         @foreach (var city in cities)
         {
-            <CityComponent City="@city" SelectedCity="@selectedCity" OnCitySelected="SelectCity" />
+            <CityComponent City="@city" SelectedCity="@SelectedCity" OnCitySelected="SelectCity" />
         }
     </div>
 </div>
@@ -12,15 +12,21 @@
 @code {
 
     private List<String> cities = CitiesRepository.GetCities().ToList<String>();
-    private string selectedCity = "Toronto";
+    private string SelectedCity = "Toronto";
 
     [Parameter]
     public EventCallback<string> OnCitySelected { get; set; }
 
     private void SelectCity(string city)
     {
-        selectedCity = city;
+        SelectedCity = city;
         OnCitySelected.InvokeAsync(city);
+    }
+
+    public void ClearSelectedCity()
+    {
+        SelectedCity = "";
+        StateHasChanged();
     }
 
 }

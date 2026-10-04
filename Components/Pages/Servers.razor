@@ -9,26 +9,34 @@
 <br />
 <br />
 
-<CityListComponent @rendermode="InteractiveServer" OnCitySelected="SelectCity" />
+@SelectedCity
+@ServerFilter
 
-<ServerSearchComponent @rendermode="InteractiveServer" ServerFilter="@ServerFilter" OnServerFilterChanged="OnServerFilterChanged" />
+<CityListComponent @ref="CityListComponent" @rendermode="InteractiveServer" OnCitySelected="SelectCity" />
 
-<ServerListComponent @rendermode="InteractiveServer" SelectedCity="@selectedCity" ServerFilter="@ServerFilter" />
+<ServerSearchComponent @ref="ServerSearchComponent" @rendermode="InteractiveServer" ServerFilter="@ServerFilter" OnServerFilterChanged="OnServerFilterChanged" />
+
+<ServerListComponent @rendermode="InteractiveServer" SelectedCity="@SelectedCity" ServerFilter="@ServerFilter" />
 
 @code {
 
-    private string selectedCity = "Toronto";
-
+    private string SelectedCity = "Toronto";
     private string ServerFilter = "";
+    private CityListComponent? CityListComponent;
+    private ServerSearchComponent? ServerSearchComponent;
 
     private void SelectCity(string city)
     {
-        selectedCity = city;
+        SelectedCity = city;
+        ServerFilter = "";
+        ServerSearchComponent?.ClearFilter();
     }
 
     private void OnServerFilterChanged(string serverFilter)
     {
         ServerFilter = serverFilter;
+        SelectedCity = "";
+        CityListComponent?.ClearSelectedCity();
     }
     
 

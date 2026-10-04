@@ -45,7 +45,14 @@
 
         public static List<Server> GetServersByCity(string city)
         {
+
+            if (string.IsNullOrWhiteSpace(city))
+            {
+                return servers.ToList();
+            }
+
             return servers.Where(s => s.City == city).ToList();
+
         }
 
         public static Server? GetServerById(int serverId)

@@ -9,7 +9,11 @@
 
     <ul>
         <Virtualize Items="Servers" Context="server">
-            <ServerComponent Server="server" />
+            <ItemContent Context="server">
+                <li>
+                    <ServerComponent Server="server" />
+                </li>
+            </ItemContent>
         </Virtualize>
     </ul>
 }
@@ -25,12 +29,12 @@
 
     protected override void OnParametersSet()
     {
-
-        Servers = ServersRepository.GetServersByCity(SelectedCity ?? "Toronto");
+        // Ensure a non-null list to avoid null dereference and to satisfy Virtualize
+        Servers = ServersRepository.GetServersByCity(SelectedCity ?? "Toronto") ?? new List<Server>();
 
         if (!string.IsNullOrEmpty(ServerFilter))
         {
-            Servers = Servers.Where(s => s.Name.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+            Servers = Servers.Where(s => s.Name!.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase)).ToList();
         }
 
     }
