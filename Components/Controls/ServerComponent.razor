@@ -11,6 +11,29 @@
         <span style="color: @(Server.IsOnline ? "green" : "red")">
             @(Server.IsOnline ? "Online" : "Offline")
         </span>
+        @if (Server.IsOnline)
+        {
+            <button type="button" class="btn btn-outline-danger" @onclick="@(() => { Server.IsOnline = false; })">
+                Turn Off
+            </button>
+        }
+        else
+        {
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => { Server.IsOnline = true; })">
+                Turn On
+            </button>
+        }
+        &nbsp;
+        @if (Server.IsOnline)
+        {
+            var random = new Random();
+            var randomNumber = random.Next(0, 500);
+            <text>@randomNumber People Online</text>
+        }
+        else
+        {
+            <text>N/A</text>
+        }
         <EditForm Model="Server" FormName="@($"FormServer-{Server.ServerId}")" OnValidSubmit="() => { DeleteServer(Server.ServerId); }">
             <button type="submit" class="btn btn-secondary">
                 Delete
