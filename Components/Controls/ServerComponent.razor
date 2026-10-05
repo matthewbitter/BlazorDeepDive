@@ -3,7 +3,7 @@
 @if (Server != null)
 {
 
-    <li @key="Server.ServerId">
+    <li @key="Server.ServerId" style="background-color: @GetBackgroundColor">
         <a href="/Servers/@Server.ServerId" class="btn btn-link">
             @Server.Name
         </a>
@@ -48,6 +48,9 @@
     [Parameter]
     public Server? Server { get; set; }
 
+    [CascadingParameter(Name = "SelectedCity")]
+    public string? SelectedCity { get; set; }
+
     protected override void OnParametersSet()
     {
 
@@ -70,6 +73,19 @@
         ServersRepository.DeleteServer(serverId);
 
         NavigationManager.NavigateTo("/servers", true);
+
+    }
+
+
+    private string GetBackgroundColor()
+    {
+
+        if (SelectedCity != null)
+        {
+            
+        }
+
+        return "";
 
     }
 
