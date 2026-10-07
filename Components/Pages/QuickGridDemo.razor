@@ -6,11 +6,15 @@
 <h3>QuickGrid Demo</h3>
 <br />
 
-@if (servers != null)
+@if (filteredServers != null)
 {
-<QuickGrid Items="servers.AsQueryable()" Pagination="paginationState">
+    <QuickGrid @ref="quickGrid" Items="filteredServers.AsQueryable()" Pagination="paginationState">
     <PropertyColumn Property="s => s.Name" />
-    <PropertyColumn Property="s => s.City" Sortable="true" />
+    <PropertyColumn Property="s => s.City" Sortable="true">
+        <ColumnOptions>
+            <input type="search" @bind="searchTerm" placeholder="Search cities..." class="form-control" @bind:after="OnSearchTermChanged" />
+        </ColumnOptions>
+    </PropertyColumn>
     <TemplateColumn Title="Status" SortBy="GridSort<Server>.ByAscending(s => s.IsOnline)">
         @if (context.IsOnline)
         {
@@ -68,8 +72,17 @@
 @code {
 
     private List<Server>? servers = ServersRepository.GetServers();
+    private List<Server>? filteredServers;
+    private string searchTerm = string.Empty;
+    private QuickGrid<Server>? quickGrid;
 
     private PaginationState paginationState = new PaginationState { ItemsPerPage = 5 };
+
+
+    protected override void OnInitialized()
+    {
+        filteredServers = servers;
+    }
 
 
     private void DeleteServer(int serverId)
@@ -78,6 +91,24 @@
         ServersRepository.DeleteServer(serverId);
 
         NavigationManager.NavigateTo("/quickgriddemo", true);
+
+    }
+
+
+    private void OnSearchTermChanged()
+    {
+
+        if (string.IsNullOrWhiteSpace(searchTerm))
+        {
+            filteredServers = servers;
+        }
+        else
+        {
+            filteredServers = servers?.Where(s => s.City.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        searchTerm = string.Empty;
+        quickGrid?.HideColumnOptionsAsync();
 
     }
 
