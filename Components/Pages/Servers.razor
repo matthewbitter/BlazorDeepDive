@@ -14,7 +14,7 @@
 
 <CityListComponent @ref="CityListComponent" @rendermode="InteractiveServer" OnCitySelected="SelectCity" />
 
-<ServerSearchComponent @ref="ServerSearchComponent" @rendermode="InteractiveServer" ServerFilter="@ServerFilter" OnServerFilterChanged="OnServerFilterChanged" />
+<ServerSearchComponent @ref="ServerSearchComponent" @rendermode="InteractiveServer" ServerFilter="@ServerFilter" OnServerFilterChanged="OnServerFilterChanged" style="width: 200px" />
 
 <CascadingValue Name="SelectedCity" Value="@SelectedCity">
     <ServerListComponent @rendermode="InteractiveServer" SelectedCity="@SelectedCity" ServerFilter="@ServerFilter" />
