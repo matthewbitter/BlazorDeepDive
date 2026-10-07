@@ -1,0 +1,19 @@
+﻿@if (task != null)
+{
+    <div>
+        <input @bind-value="@task.IsCompleted" type="checkbox" />
+        <input type="text" placeholder="@task.Name" disabled=@task.IsCompleted style="text-decoration: @(task.IsCompleted ? "line-through" : "none")" />
+        @if (task.IsCompleted)
+        {
+            <text>Completed at: @task.CompletedDate.ToLongDateString() </text>
+        }
+    </div>
+}
+
+
+@code {
+
+    [Parameter]
+    public ToDoTask? task { get; set; }
+
+}
