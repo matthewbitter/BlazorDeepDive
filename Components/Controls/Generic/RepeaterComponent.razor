@@ -1,0 +1,28 @@
+﻿@typeparam TItem
+
+@Header
+@if (Items is not null && Items.Any() && Row is not null)
+{
+
+    <Virtualize Items="@Items" Context="item">
+        @Row(item)
+    </Virtualize>
+
+}
+@Footer
+
+@code {
+
+    [Parameter]
+    public List<TItem>? Items { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? Row { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? Header { get; set; }
+
+    [Parameter]
+    public RenderFragment<TItem>? Footer { get; set; }
+
+}

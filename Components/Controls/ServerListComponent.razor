@@ -6,17 +6,15 @@
         Add Server
     </a>
     <br />
-
-    <ul class="list-unstyled">
-        <Virtualize Items="Servers" Context="server">
-            <ItemContent Context="server">
-                <li>
-                    <ServerComponent Server="server" />
-                </li>
-            </ItemContent>
-        </Virtualize>
-    </ul>
 }
+
+<ul class="list-unstyled">
+    <RepeaterComponent TItem="Server" Items="Servers">
+        <Row Context="server">
+            <ServerComponent Server="server" />
+        </Row>
+    </RepeaterComponent>
+</ul>
 
 @code {
 
