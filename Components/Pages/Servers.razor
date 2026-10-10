@@ -1,6 +1,8 @@
 ﻿@page "/servers"
+@using BlazorDeepDive.StateStore
 
 @inject NavigationManager NavigationManager
+@inject SessionStorage SessionStorage
 
 @rendermode InteractiveServer
 
@@ -27,11 +29,12 @@
     private CityListComponent? CityListComponent;
     private ServerSearchComponent? ServerSearchComponent;
 
-    private void SelectCity(string city)
+    private async Task SelectCity(string city)
     {
         SelectedCity = city;
         ServerFilter = "";
         ServerSearchComponent?.ClearFilter();
+        await SessionStorage.SetItemAsync("SelectedCity", SelectedCity);
     }
 
     private void OnServerFilterChanged(string serverFilter)
