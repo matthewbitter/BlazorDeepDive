@@ -1,6 +1,9 @@
 ﻿@page "/servers/{Id:int}"
 
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
+
+<NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" />
 
 <h3>Edit Server</h3>
 
@@ -94,6 +97,19 @@
         }
 
         
+    }
+
+    private async Task OnBeforeInternalNavigation(LocationChangingContext context)
+    {
+
+        // Prevent navigation and show a confirmation dialog
+        var confirmed = await JSRuntime.InvokeAsync<bool>("confirm", "You have unsaved changes. Are you sure you want to leave?");
+
+        if (!confirmed)
+        {
+            context.PreventNavigation();
+        }
+
     }
 
 }
