@@ -1,9 +1,12 @@
 ﻿@page "/weather"
 @attribute [StreamRendering]
+@using BlazorDeepDive.StateStore
+
+@inject SessionStorage SessionStorage
 
 <PageTitle>Weather</PageTitle>
 
-<h1>Weather</h1>
+<h1>@SelectedCity Weather</h1>
 
 <p>This component demonstrates showing data.</p>
 
@@ -38,9 +41,13 @@ else
 
 @code {
     private WeatherForecast[]? forecasts;
+    private string SelectedCity { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
+
+        SelectedCity = await SessionStorage.GetItemAsync<string>("SelectedCity") ?? "";
+
         // Simulate asynchronous loading to demonstrate streaming rendering
         await Task.Delay(500);
 

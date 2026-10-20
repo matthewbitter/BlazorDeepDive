@@ -2,6 +2,7 @@
 
 @inject NavigationManager NavigationManager
 @inject IJSRuntime JSRuntime
+@inject IServersEFCoreRepository ServersEFCoreRepository
 
 <NavigationLock OnBeforeInternalNavigation="OnBeforeInternalNavigation" ConfirmExternalNavigation="true" />
 
@@ -80,7 +81,7 @@
     protected override void OnParametersSet()
     {
 
-        server ??= ServersRepository.GetServerById(this.Id);
+        server ??= ServersEFCoreRepository.GetServerById(this.Id);
 
     }
 
@@ -90,7 +91,7 @@
         if (server != null)
         {
             
-            ServersRepository.UpdateServer(server);
+            ServersEFCoreRepository.UpdateServer(server);
 
             NavigationManager.NavigateTo("/Servers");
 

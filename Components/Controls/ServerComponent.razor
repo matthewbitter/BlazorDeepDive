@@ -1,4 +1,5 @@
 ﻿@inject NavigationManager NavigationManager
+@inject IServersEFCoreRepository ServersEFCoreRepository
 
 @if (Server != null)
 {
@@ -30,13 +31,13 @@
         <td>
             @if (Server.IsOnline)
             {
-                <button type="button" class="btn btn-outline-danger" @onclick="@(() => { Server.IsOnline = false; })">
+                <button type="button" class="btn btn-outline-danger" @onclick="@(() => { Server.IsOnline = false; ServersEFCoreRepository.UpdateServer(Server); })">
                     Turn Off
                 </button>
             }
             else
             {
-                <button type="button" class="btn btn-outline-success" @onclick="@(() => { Server.IsOnline = true; })">
+                <button type="button" class="btn btn-outline-success" @onclick="@(() => { Server.IsOnline = true; ServersEFCoreRepository.UpdateServer(Server); })">
                     Turn On
                 </button>
             }
@@ -79,7 +80,7 @@
     private void DeleteServer(int serverId)
     {
 
-        ServersRepository.DeleteServer(serverId);
+        ServersEFCoreRepository.DeleteServer(serverId);
 
         NavigationManager.NavigateTo("/servers", true);
 

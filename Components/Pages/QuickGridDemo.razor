@@ -1,6 +1,7 @@
 ﻿@page "/quickgriddemo"
 @using Microsoft.AspNetCore.Components.QuickGrid
 @inject NavigationManager NavigationManager
+@inject IServersEFCoreRepository ServersEFCoreRepository
 @rendermode InteractiveServer
 
 <h3>QuickGrid Demo</h3>
@@ -40,13 +41,13 @@
     <TemplateColumn Title="Actions">
         @if (context.IsOnline)
         {
-            <button type="button" class="btn btn-outline-danger" @onclick="@(() => { context.IsOnline = false; })">
+            <button type="button" class="btn btn-outline-danger" @onclick="@(() => { context.IsOnline = false; ServersEFCoreRepository.UpdateServer(context); })">
                 Turn Off
             </button>
         }
         else
         {
-            <button type="button" class="btn btn-outline-success" @onclick="@(() => { context.IsOnline = true; })">
+            <button type="button" class="btn btn-outline-success" @onclick="@(() => { context.IsOnline = true; ServersEFCoreRepository.UpdateServer(context); })">
                 Turn On
             </button>
         }
@@ -71,7 +72,7 @@
 
 @code {
 
-    private List<Server>? servers = ServersRepository.GetServers();
+    private List<Server>? servers;
     private List<Server>? filteredServers;
     private string searchTerm = string.Empty;
     private QuickGrid<Server>? quickGrid;
@@ -81,6 +82,7 @@
 
     protected override void OnInitialized()
     {
+        servers = ServersEFCoreRepository.GetServers();
         filteredServers = servers;
     }
 
@@ -88,7 +90,7 @@
     private void DeleteServer(int serverId)
     {
 
-        ServersRepository.DeleteServer(serverId);
+        ServersEFCoreRepository.DeleteServer(serverId);
 
         NavigationManager.NavigateTo("/quickgriddemo", true);
 

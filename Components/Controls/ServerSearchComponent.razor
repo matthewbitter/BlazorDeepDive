@@ -1,4 +1,6 @@
-﻿<div class="input-group input-width mb-3" @attributes="OtherAttributes">
+﻿@inject IServersEFCoreRepository ServersEFCoreRepository
+
+<div class="input-group input-width mb-3" @attributes="OtherAttributes">
     <input @bind-value="ServerFilter" type="text" class="form-control" placeholder="Search servers..." />
     <button type="button" class="btn btn-outline-secondary" @onclick="Search">
         Search
@@ -21,9 +23,7 @@
 
         OnServerFilterChanged.InvokeAsync(ServerFilter);
 
-        //servers = ServersRepository.GetServersByCity(selectedCity)
-        //    .Where(s => s.Name.Contains(ServerFilter, StringComparison.OrdinalIgnoreCase))
-        //    .ToList();
+        //servers = ServersEFCoreRepository.SearchServers(ServerFilter);
 
     }
 

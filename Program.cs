@@ -1,12 +1,19 @@
 using BlazorDeepDive.Components;
+using BlazorDeepDive.Data;
+using BlazorDeepDive.Models;
 using BlazorDeepDive.StateStore;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddDbContextFactory<ServerManagementContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 
 builder.Services.AddTransient<SessionStorage>();
+builder.Services.AddTransient<IServersEFCoreRepository, ServersEFCoreRepository>();
 
 var app = builder.Build();
 

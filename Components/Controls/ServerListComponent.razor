@@ -1,4 +1,6 @@
-﻿@if (Servers != null && Servers.Count > 0)
+﻿@inject IServersEFCoreRepository ServersEFCoreRepository
+
+@if (Servers != null && Servers.Count > 0)
 {
 
     <br />
@@ -40,7 +42,7 @@
     protected override void OnParametersSet()
     {
         // Ensure a non-null list to avoid null dereference and to satisfy Virtualize
-        Servers = ServersRepository.GetServersByCity(SelectedCity ?? "Toronto") ?? new List<Server>();
+        Servers = ServersEFCoreRepository.GetServersByCity(SelectedCity ?? "Toronto") ?? new List<Server>();
 
         if (!string.IsNullOrEmpty(ServerFilter))
         {
